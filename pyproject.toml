@@ -1,0 +1,17 @@
+# ─────────────────────────────────────────────────────────
+# pyproject.toml — Python project configuration
+# ─────────────────────────────────────────────────────────
+# Reference: https://packaging.python.org/en/latest/specifications/pyproject-toml/#project
+# ─────────────────────────────────────────────────────────
+
+[project]
+name = "ai-ops-command-center"
+version = "0.1.0"
+description = "AI Operations Command Center"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.34.0",
+    "pydantic-settings>=2.7.0",
+    "httpx>=0.28.0",
+]
