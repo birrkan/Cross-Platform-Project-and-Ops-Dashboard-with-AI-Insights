@@ -1,0 +1,38 @@
+# ─────────────────────────────────────────────────────────
+# 00-bootstrap.yml — Create ansible user with sudo + SSH key
+# ─────────────────────────────────────────────────────────
+# Connect as debian (initial setup user), create the dedicated
+# ansible user for all future playbooks.
+#
+# References:
+#   https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html
+#   https://docs.ansible.com/ansible/latest/collections/ansible/builtin/authorized_key_module.html
+# ─────────────────────────────────────────────────────────
+
+- name: Bootstrap — Create ansible user
+  hosts: server
+  remote_user: debian # overrides the default user in inventory file
+  become: true
+  vars_files:
+      - ../vault/vault.yml
+  tasks:
+    - name: Create ansible user
+      ansible.builtin.user:
+        name: ansible
+        groups: sudo
+        append: yes
+        shell: /bin/bash
+        createhome: yes
+
+    - name: Install SSH key for ansible user
+      ansible.builtin.authorized_key:
+        user: ansible
+        key: "{{ lookup('file', '~/.ssh/id_ed25519.pub') }}"
+        state: present
+
+    - name: Allow passwordless sudo for ansible user
+      ansible.builtin.copy:
+        dest: /etc/sudoers.d/ansible
+        mode: "0440"
+        content: |
+          ansible ALL=(ALL) NOPASSWD: ALL

@@ -1,0 +1,15 @@
+# ─────────────────────────────────────────────────────────
+# 01-docker.yml — Install Docker Engine and create network
+# ─────────────────────────────────────────────────────────
+# Run after 00-bootstrap.yml (ansible user must exist).
+# Connects as ansible with passwordless sudo.
+#
+# Reference: https://docs.docker.com/engine/install/debian/#install-using-the-repository
+# ─────────────────────────────────────────────────────────
+
+- name: Install Docker
+  hosts: server
+  become: true
+  gather_facts: true
+  roles:
+    - docker

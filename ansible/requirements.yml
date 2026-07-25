@@ -1,0 +1,10 @@
+  # ─────────────────────────────────────────────────────────
+# requirements.yml — Ansible collections for the control machine
+# ─────────────────────────────────────────────────────────
+# Install with: ansible-galaxy collection install -r ansible/requirements.yml
+#
+# Reference: https://docs.ansible.com/ansible/latest/galaxy/user_guide.html#installing-multiple-collections
+# ─────────────────────────────────────────────────────────
+
+collections:
+  - name: community.docker

@@ -1,0 +1,67 @@
+# ─────────────────────────────────────────────────────────
+# docker/tasks/main.yml — Install Docker Engine + create network
+# ─────────────────────────────────────────────────────────
+# Follows the official Debian apt repository install method:
+# https://docs.docker.com/engine/install/debian/#install-using-the-repository
+# ─────────────────────────────────────────────────────────
+
+- name: Install Docker prerequisites
+  ansible.builtin.apt:
+    name:
+      - ca-certificates
+      - curl
+    state: present
+    update_cache: yes
+
+# sudo install -m 0755 -d /etc/apt/keyrings
+- name: Create apt keyrings directory
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: "0755"
+
+# curl -fsSL ... -o /etc/apt/keyrings/docker.asc
+- name: Download Docker GPG key
+  ansible.builtin.get_url:
+    url: https://download.docker.com/linux/debian/gpg
+    dest: /etc/apt/keyrings/docker.asc
+    mode: "0644"
+
+# Add Docker repository
+- name: Add Docker apt repository
+  ansible.builtin.deb822_repository:
+    name: docker
+    types: deb
+    uris: https://download.docker.com/linux/debian
+    suites:
+      - '{{ ansible_facts["distribution_release"] }}'
+    components:
+      - stable
+    architectures:
+      - amd64
+    signed_by: /etc/apt/keyrings/docker.asc
+    state: present
+    enabled: true
+
+# sudo apt update
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+
+# sudo apt install docker-ce...
+- name: Install Docker Engine
+  ansible.builtin.apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: present
+
+# sudo systemctl start docker
+- name: Start Docker service
+  ansible.builtin.systemd:
+    name: docker
+    state: started
+    enabled: yes

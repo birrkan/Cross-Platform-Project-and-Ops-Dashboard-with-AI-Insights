@@ -1,0 +1,9 @@
+# connects the target machine as it's default user
+# for the first time connection
+
+all:
+  hosts:
+    server:
+      ansible_host: 192.168.122.10
+      ansible_user: debian
+      ansible_become_password: "{{ vault_become_password }}"

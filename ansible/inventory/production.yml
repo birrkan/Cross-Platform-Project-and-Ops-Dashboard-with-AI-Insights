@@ -1,0 +1,11 @@
+# ─────────────────────────────────────────────────────────
+# server.yml — Ansible inventory for the single server
+# ─────────────────────────────────────────────────────────
+# Reference: https://docs.ansible.com/ansible/latest/inventory_guide/intro_inventory.html
+# ─────────────────────────────────────────────────────────
+
+all:
+  hosts:
+    server:
+      ansible_host: 192.168.122.10
+      ansible_user: ansible
