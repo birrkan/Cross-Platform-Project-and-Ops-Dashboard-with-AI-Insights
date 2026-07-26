@@ -17,3 +17,7 @@ ansible-playbook -i inventory/bootstrap.yml playbooks/00-bootstrap.yml --ask-vau
 echo ""
 echo "=== 01-docker: Install Docker ==="
 ansible-playbook playbooks/01-docker.yml
+
+echo ""
+echo "=== 02-llamacpp: Install llama.cpp ==="
+ansible-playbook playbooks/02-llamacpp.yml

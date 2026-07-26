@@ -1,3 +1,59 @@
-#SPDX-License-Identifier: MIT-0
----
-# tasks file for roles/llamacpp
+# ─────────────────────────────────────────────────────────
+# llamacpp/tasks/main.yml — Install llama.cpp + management script
+# ─────────────────────────────────────────────────────────
+# Installs the llama.cpp CLI via the official script, sets up
+# environment variables for model caching, and copies the
+# management script for manual server control.
+#
+# Reference: https://github.com/ggml-org/llama.cpp
+# ─────────────────────────────────────────────────────────
+
+- name: Create model cache directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+  loop:
+    - "{{ llamacpp_model_dir }}/hf"
+    - "{{ llamacpp_model_dir }}/hf-hub"
+    - "{{ llamacpp_model_dir }}/transformers"
+    - "{{ llamacpp_model_dir }}/datasets"
+
+- name: Download and install llama.cpp
+  ansible.builtin.unarchive:
+    src: https://github.com/ggml-org/llama.cpp/releases/download/b10107/llama-b10107-bin-ubuntu-x64.tar.gz
+    dest: /usr/local/bin/
+    remote_src: yes
+    extra_opts:
+      - --strip-components=1
+    creates: /usr/local/bin/llama
+
+- name: Set Hugging Face environment variables
+  ansible.builtin.copy:
+    dest: /etc/profile.d/llama.sh
+    mode: "0644"
+    content: |
+      export HF_HOME={{ llamacpp_model_dir }}/hf
+      export HUGGINGFACE_HUB_CACHE={{ llamacpp_model_dir }}/hf-hub
+      export TRANSFORMERS_CACHE={{ llamacpp_model_dir }}/transformers
+      export HF_DATASETS_CACHE={{ llamacpp_model_dir }}/datasets
+
+# https://github.com/charmbracelet/gum
+- name: Install gum (charm.sh TUI toolkit)
+  ansible.builtin.shell:
+    cmd: |
+      set -e
+      mkdir -p /etc/apt/keyrings
+      curl -fsSL https://repo.charm.sh/apt/gpg.key | gpg --dearmor -o /etc/apt/keyrings/charm.gpg
+      echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" > /etc/apt/sources.list.d/charm.list
+      apt update
+      apt install -y gum
+    creates: /usr/bin/gum
+  args:
+    executable: /bin/bash
+
+- name: Copy llama-manager script
+  ansible.builtin.copy:
+    src: llama-manager.sh
+    dest: /opt/llama/llama-manager.sh
+    mode: "0755"

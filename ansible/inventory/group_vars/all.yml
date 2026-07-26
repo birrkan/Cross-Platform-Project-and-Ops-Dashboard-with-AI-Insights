@@ -1,0 +1,15 @@
+# ─────────────────────────────────────────────────────────
+# all.yml — All configurable variables
+# ─────────────────────────────────────────────────────────
+# Grows as the project grows. Only what's needed, nothing more.
+#
+# Reference: https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html
+# ─────────────────────────────────────────────────────────
+
+# ── Docker ──────────────────────────────────────────
+docker_network_name: "ai-ops-net"
+docker_network_subnet: "172.20.0.0/16"
+
+# ── llama.cpp ───────────────────────────────────────
+llamacpp_port: 3535
+llamacpp_model_dir: /opt/llama/models

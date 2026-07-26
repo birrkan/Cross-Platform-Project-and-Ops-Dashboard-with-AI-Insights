@@ -1,11 +1,15 @@
 # ─────────────────────────────────────────────────────────
-# all.yml — All configurable variables
+# 02-llamacpp.yml — Install llama.cpp on the server
 # ─────────────────────────────────────────────────────────
-# Grows as the project grows. Only what's needed, nothing more.
+# Installs the llama.cpp CLI natively, sets up model cache
+# directories, and creates a systemd service for the server.
 #
-# Reference: https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html
+# Reference: https://github.com/ggml-org/llama.cpp
 # ─────────────────────────────────────────────────────────
 
-# ── Docker ──────────────────────────────────────────
-docker_network_name: "ai-ops-net"
-docker_network_subnet: "172.20.0.0/16"
+- name: Install llama.cpp
+  hosts: server
+  become: true
+  gather_facts: true
+  roles:
+    - llamacpp
