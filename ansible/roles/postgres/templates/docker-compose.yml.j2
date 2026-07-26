@@ -1,0 +1,24 @@
+services:
+  postgres:
+    image: {{ postgres_image }}
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: {{ postgres_user }}
+      POSTGRES_PASSWORD: {{ vault_postgres_password }}
+      POSTGRES_DB: {{ postgres_db }}
+    ports:
+      - "{{ postgres_port }}:5432"
+    volumes:
+      - "{{ postgres_data_dir }}:/var/lib/postgresql/data"
+    networks:
+      - {{ docker_network_name }}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U {{ postgres_user }} -d {{ postgres_db }}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  {{ docker_network_name }}:
+    external: true

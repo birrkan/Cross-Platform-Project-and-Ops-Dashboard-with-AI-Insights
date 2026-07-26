@@ -13,3 +13,10 @@ docker_network_subnet: "172.20.0.0/16"
 # ── llama.cpp ───────────────────────────────────────
 llamacpp_port: 3535
 llamacpp_model_dir: /opt/llama/models
+
+# ── PostgreSQL ──────────────────────────────────────
+postgres_port: 5432
+postgres_user: aiops
+postgres_db: aiops
+postgres_data_dir: /opt/postgres/data
+postgres_image: pgvector/pgvector:pg17

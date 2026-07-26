@@ -21,3 +21,7 @@ ansible-playbook playbooks/01-docker.yml
 echo ""
 echo "=== 02-llamacpp: Install llama.cpp ==="
 ansible-playbook playbooks/02-llamacpp.yml
+
+echo ""
+echo "=== 03-postgres: Deploy PostgreSQL ==="
+ansible-playbook playbooks/03-postgres.yml --ask-vault-pass

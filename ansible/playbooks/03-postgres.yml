@@ -1,0 +1,15 @@
+# ─────────────────────────────────────────────────────────
+# 03-postgres.yml — Deploy PostgreSQL with PGVector
+# ─────────────────────────────────────────────────────────
+# Runs PostgreSQL in Docker using pgvector/pgvector image
+# with persistent storage and ai-ops-net network.
+# ─────────────────────────────────────────────────────────
+
+- name: Deploy PostgreSQL with PGVector
+  hosts: server
+  become: true
+  vars_files:
+    - ../vault/vault.yml
+  gather_facts: true
+  roles:
+    - postgres
