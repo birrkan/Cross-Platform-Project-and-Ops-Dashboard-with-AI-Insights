@@ -1,0 +1,14 @@
+# ─────────────────────────────────────────────────────────
+# 04-glpi.yml — Deploy glpi
+# ─────────────────────────────────────────────────────────
+# Runs glpi
+# ─────────────────────────────────────────────────────────
+
+- name: Deploy glpi
+  hosts: server
+  become: true
+  vars_files:
+    - ../vault/vault.yml
+  gather_facts: true
+  roles:
+    - glpi

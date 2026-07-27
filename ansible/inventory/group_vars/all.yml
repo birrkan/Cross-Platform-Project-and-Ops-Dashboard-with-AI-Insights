@@ -20,3 +20,11 @@ postgres_user: aiops
 postgres_db: aiops
 postgres_data_dir: /opt/postgres/data
 postgres_image: pgvector/pgvector:pg17
+
+# ── GLPI ───────────────────────────────────────────
+GLPI_DB_HOST: db
+GLPI_DB_PORT: 3306
+GLPI_DB_NAME: glpi
+GLPI_DB_USER: glpi
+glpi_dir: /opt/glpi
+glpi_host_port: 7001

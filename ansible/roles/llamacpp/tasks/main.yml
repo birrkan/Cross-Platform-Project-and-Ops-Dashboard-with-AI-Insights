@@ -28,7 +28,7 @@
       - --strip-components=1
     creates: /usr/local/bin/llama
 
-- name: Set Hugging Face environment variables
+- name: Set Hugging Face environment variables # so that it doesnt download them in /cache
   ansible.builtin.copy:
     dest: /etc/profile.d/llama.sh
     mode: "0644"

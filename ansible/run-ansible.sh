@@ -25,3 +25,7 @@ ansible-playbook playbooks/02-llamacpp.yml
 echo ""
 echo "=== 03-postgres: Deploy PostgreSQL ==="
 ansible-playbook playbooks/03-postgres.yml --ask-vault-pass
+
+echo ""
+echo "=== 04-glpi: Deploy GLPI ==="
+ansible-playbook playbooks/04-glpi.yml --ask-vault-pass

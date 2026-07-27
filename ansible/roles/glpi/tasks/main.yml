@@ -1,3 +1,19 @@
-#SPDX-License-Identifier: MIT-0
 ---
-# tasks file for roles/glpi
+- name: Create directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+  loop:
+    - "{{ glpi_dir }}"
+
+- name: Deploy docker-compose.yml
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: /opt/glpi/docker-compose.yml
+    mode: "0644"
+
+- name: Start GLPI container
+  ansible.builtin.shell:
+    cmd: docker compose up -d
+    chdir: /opt/glpi
