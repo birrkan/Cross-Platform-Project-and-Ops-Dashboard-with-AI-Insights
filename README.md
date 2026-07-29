@@ -5,8 +5,8 @@
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![Ansible](https://img.shields.io/badge/Ansible-EE0000?style=for-the-badge&logo=ansible&logoColor=white)
 ![OpenProject](https://img.shields.io/badge/OpenProject-0773B5?style=for-the-badge&logo=openproject&logoColor=white)
-![GLPI](https://img.shields.io/badge/GLPI-0066CC?style=for-the-badge)
-![Ollama](https://img.shields.io/badge/Ollama-000000?style=for-the-badge)
+![GLPI](https://img.shields.io/badge/GLPI-0066CC?style=for-the-badge&logo=glpi&logoColor=white)
+![llama.cpp](https://img.shields.io/badge/llama.cpp-000000?style=for-the-badge&logo=llama.cpp&logoColor=white)
 
 # PROJECT DEFINITION
 # Cross-Platform Project & Ops Dashboard with AI Insights:
