@@ -31,5 +31,12 @@ class Settings(BaseSettings):
     llamacpp_base_url: str = "http://127.0.0.1:3535/v1"
     llamacpp_model: str = "MaziyarPanahi/Qwen3-14B-GGUF:Q4_K_M"
 
+    glpi_api_url: str = "http://192.168.122.10:7001"
+    glpi_api_path: str = "/api.php/v2.3"
+    glpi_app_token: str = ""
+    glpi_client_id: str = ""
+    glpi_client_secret: str = ""
+    glpi_username: str = ""
+    glpi_password: str = ""
 
 settings = Settings()

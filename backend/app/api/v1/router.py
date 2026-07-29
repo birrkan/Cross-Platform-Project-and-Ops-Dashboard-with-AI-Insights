@@ -10,9 +10,11 @@
 from fastapi import APIRouter
 
 from backend.app.api.v1.llamacpp import router as llamacpp_router
+from backend.app.api.v1.glpi import router as glpi_router
 
 
 api_v1_router = APIRouter()
 
 # Each include_router adds a group of endpoints under /api/v1
 api_v1_router.include_router(llamacpp_router)
+api_v1_router.include_router(glpi_router)

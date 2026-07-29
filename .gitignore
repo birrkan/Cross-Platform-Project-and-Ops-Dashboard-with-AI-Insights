@@ -1,3 +1,4 @@
 ai_ops_command_center.egg-info/
 *.pyc
 .venv
+.env
