@@ -1,3 +1,17 @@
+## Technologies Used
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Ansible](https://img.shields.io/badge/Ansible-EE0000?style=for-the-badge&logo=ansible&logoColor=white)
+![OpenProject](https://img.shields.io/badge/OpenProject-0773B5?style=for-the-badge&logo=openproject&logoColor=white)
+![GLPI](https://img.shields.io/badge/GLPI-0066CC?style=for-the-badge)
+![Ollama](https://img.shields.io/badge/Ollama-000000?style=for-the-badge)
+
+# PROJECT DEFINITION
+# Cross-Platform Project & Ops Dashboard with AI Insights:
+A self-hosted AI-powered management dashboard that connects IT service management, development workflows, and organizational knowledge into a unified operational view. The platform integrates GLPI (incidents and requests), OpenProject (development tasks and project progress), and XWiki (knowledge base) to provide AI-generated summaries, trend analysis, and weekly operational reports. A locally hosted LLM analyzes data from connected systems while keeping business information private. The platform is deployed on a single server using Ansible and developed with FastAPI.
+
 
 
 ## how to start FASTAPI:
@@ -12,10 +26,41 @@ https://help.glpi-project.org/tutorials/readme-1/api-v2
 ![get api token](screenshots/glpi/2glpi-get-token.png)
 
 ## glpi id and token
-include the id and token in .env file
+include the id and token in .env file. (rename .env.example to .env)
 ```
 GLPI_CLIENT_ID=
 GLPI_CLIENT_SECRET=
 GLPI_USERNAME=glpi
 GLPI_PASSWORD=glpi
 ```
+
+
+
+### MVP goal example:
+Company Status  
+────────────────────────  
+IT Support  
+Open incidents:  
+23  
+
+Main issue:  
+Authentication failures  
+
+AI Summary:  
+Most incidents originate from the latest application update.  
+────────────────────────  
+Development  
+Active tasks:  
+18  
+
+Sprint progress:  
+72%  
+
+AI Summary:  
+Authentication bug is blocking release.  
+────────────────────────  
+Risks  
+
+⚠ Database migration delayed  
+⚠ Increasing ticket volume  
+⚠ 2 critical bugs unresolved
