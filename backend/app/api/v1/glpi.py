@@ -1,4 +1,6 @@
 from asyncio import gather
+from collections import defaultdict
+from datetime import datetime, timedelta
 
 from fastapi import APIRouter, HTTPException
 from httpx import AsyncClient
@@ -40,6 +42,56 @@ async def list_tickets():
     if resp.status_code != 200:
         raise HTTPException(status_code=resp.status_code, detail=resp.text)
     return resp.json()
+
+
+ACTIVE_STATUS_IDS = {1, 2, 3, 4}
+
+
+@router.get("/tickets/stats")
+async def ticket_stats():
+    tickets = await list_tickets()
+
+    total = len(tickets)
+    active = 0
+    solved = 0
+    by_status = defaultdict(int)
+    by_urgency = defaultdict(int)
+    by_day = defaultdict(int)
+
+    today = datetime.now().date()
+    for t in tickets:
+        if t.get("is_deleted"):
+            continue
+
+        status_id = t.get("status", {}).get("id")
+        by_status[t.get("status", {}).get("name", "Unknown")] += 1
+        by_urgency[f"urgency_{t.get('urgency', 0)}"] += 1
+
+        if status_id in ACTIVE_STATUS_IDS:
+            active += 1
+        elif status_id in {5, 6}:
+            solved += 1
+
+        created = t.get("date", "")[:10]
+        if created:
+            try:
+                by_day[datetime.fromisoformat(created).date()] += 1
+            except ValueError:
+                pass
+
+    trend = []
+    for offset in range(13, -1, -1):
+        day = today - timedelta(days=offset)
+        trend.append({"date": day.isoformat(), "count": by_day.get(day, 0)})
+
+    return {
+        "total": total,
+        "active": active,
+        "solved": solved,
+        "by_status": dict(by_status),
+        "by_urgency": dict(by_urgency),
+        "trend_14d": trend,
+    }
 
 
 SUB_RESOURCES = {
