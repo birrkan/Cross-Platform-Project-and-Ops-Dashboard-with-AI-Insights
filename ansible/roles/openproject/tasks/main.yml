@@ -1,3 +1,28 @@
-#SPDX-License-Identifier: MIT-0
+# ─────────────────────────────────────────────────────────
+# openproject/tasks/main.yml — Deploy OpenProject container
+# ─────────────────────────────────────────────────────────
+# Follows the same pattern as the glpi role: create dir,
+# render docker-compose from template, start via compose.
+#
+# Reference: https://www.openproject.org/docs/installation-and-operations/installation/docker/
+# ─────────────────────────────────────────────────────────
+
 ---
-# tasks file for roles/openproject
+- name: Create directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+  loop:
+    - "{{ openproject_dir }}"
+
+- name: Deploy docker-compose.yml
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ openproject_dir }}/docker-compose.yml"
+    mode: "0644"
+
+- name: Start OpenProject container
+  ansible.builtin.shell:
+    cmd: docker compose up -d --remove-orphans
+    chdir: "{{ openproject_dir }}"

@@ -29,3 +29,11 @@ ansible-playbook playbooks/03-postgres.yml --ask-vault-pass
 echo ""
 echo "=== 04-glpi: Deploy GLPI ==="
 ansible-playbook playbooks/04-glpi.yml --ask-vault-pass
+
+echo ""
+echo "=== 05-xwiki: Deploy XWiki ==="
+ansible-playbook playbooks/05-xwiki.yml --ask-vault-pass
+
+echo ""
+echo "=== 06-openproject: Deploy OpenProject ==="
+ansible-playbook playbooks/06-openproject.yml --ask-vault-pass

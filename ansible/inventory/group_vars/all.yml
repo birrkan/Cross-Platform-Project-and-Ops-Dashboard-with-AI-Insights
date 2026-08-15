@@ -22,9 +22,23 @@ postgres_data_dir: /opt/postgres/data
 postgres_image: pgvector/pgvector:pg17
 
 # ── GLPI ───────────────────────────────────────────
-GLPI_DB_HOST: db
+GLPI_DB_HOST: glpi_db
 GLPI_DB_PORT: 3306
 GLPI_DB_NAME: glpi
 GLPI_DB_USER: glpi
 glpi_dir: /opt/glpi
 glpi_host_port: 7001
+
+# ── XWiki ──────────────────────────────────────────
+xwiki_dir: /opt/xwiki
+xwiki_host_port: 7002
+xwiki_version: "17"
+xwiki_db_name: xwiki
+xwiki_db_user: xwiki
+xwiki_db_image: "mariadb:12"
+
+# ── OpenProject ────────────────────────────────────
+openproject_dir: /opt/openproject
+openproject_host_port: 7003
+openproject_version: "17"
+openproject_host_name: "192.168.122.10"

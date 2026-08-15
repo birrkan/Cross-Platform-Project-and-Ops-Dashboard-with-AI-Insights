@@ -1,0 +1,60 @@
+# ─────────────────────────────────────────────────────────
+# xwiki/docker-compose.yml.j2 — XWiki (Tomcat) + MariaDB
+# ─────────────────────────────────────────────────────────
+# Based on the official XWiki Docker setup. init.sql grants
+# the xwiki user privileges so it can create subwikis.
+# The web container runs with an init process (tini) so
+# orphaned children (e.g. LibreOffice) get reaped.
+#
+# Reference: https://www.xwiki.org/xwiki/bin/view/documentation/xs/admin/installation/methods/install-xwiki-docker/
+# Docker repo: https://github.com/xwiki/xwiki-docker
+# ─────────────────────────────────────────────────────────
+
+name: xwiki
+
+services:
+  web:
+    image: "xwiki:{{ xwiki_version }}-mariadb-tomcat"
+    container_name: xwiki-web
+    restart: unless-stopped
+    init: true
+    depends_on:
+      - xwiki_db
+    ports:
+      - "{{ xwiki_host_port }}:8080"
+    environment:
+      DB_USER: {{ xwiki_db_user }}
+      DB_PASSWORD: {{ vault_xwiki_db_password }}
+      DB_DATABASE: {{ xwiki_db_name }}
+      DB_HOST: xwiki-db
+    volumes:
+      - xwiki_data:/usr/local/xwiki
+    networks:
+      - {{ docker_network_name }}
+
+  xwiki_db:
+    image: "{{ xwiki_db_image }}"
+    container_name: xwiki-db
+    restart: unless-stopped
+    volumes:
+      - xwiki_db_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_USER: {{ xwiki_db_user }}
+      MYSQL_PASSWORD: {{ vault_xwiki_db_password }}
+      MYSQL_DATABASE: {{ xwiki_db_name }}
+    command:
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_bin"
+      - "--explicit-defaults-for-timestamp=1"
+    networks:
+      - {{ docker_network_name }}
+
+volumes:
+  xwiki_data:
+  xwiki_db_data:
+
+networks:
+  {{ docker_network_name }}:
+    external: true

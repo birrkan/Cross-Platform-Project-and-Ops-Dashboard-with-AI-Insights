@@ -13,5 +13,5 @@
 
 - name: Start PostgreSQL container
   ansible.builtin.shell:
-    cmd: docker compose up -d
+    cmd: docker compose up -d --remove-orphans
     chdir: /opt/postgres

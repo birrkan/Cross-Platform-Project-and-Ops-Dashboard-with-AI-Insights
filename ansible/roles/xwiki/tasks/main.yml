@@ -1,3 +1,34 @@
-#SPDX-License-Identifier: MIT-0
+# ─────────────────────────────────────────────────────────
+# xwiki/tasks/main.yml — Deploy XWiki + MariaDB containers
+# ─────────────────────────────────────────────────────────
+# Same pattern as the glpi role: create dir, deploy init.sql
+# and docker-compose template, start via compose.
+#
+# Reference: https://www.xwiki.org/xwiki/bin/view/documentation/xs/admin/installation/methods/install-xwiki-docker/
+# ─────────────────────────────────────────────────────────
+
 ---
-# tasks file for roles/xwiki
+- name: Create directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+  loop:
+    - "{{ xwiki_dir }}"
+
+- name: Deploy init.sql
+  ansible.builtin.copy:
+    src: init.sql
+    dest: "{{ xwiki_dir }}/init.sql"
+    mode: "0644"
+
+- name: Deploy docker-compose.yml
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ xwiki_dir }}/docker-compose.yml"
+    mode: "0644"
+
+- name: Start XWiki container
+  ansible.builtin.shell:
+    cmd: docker compose up -d --remove-orphans
+    chdir: "{{ xwiki_dir }}"

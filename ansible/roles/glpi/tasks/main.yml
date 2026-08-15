@@ -15,5 +15,5 @@
 
 - name: Start GLPI container
   ansible.builtin.shell:
-    cmd: docker compose up -d
+    cmd: docker compose up -d --remove-orphans
     chdir: /opt/glpi

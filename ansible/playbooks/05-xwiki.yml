@@ -1,0 +1,14 @@
+# ─────────────────────────────────────────────────────────
+# 05-xwiki.yml — Deploy xwiki
+# ─────────────────────────────────────────────────────────
+# Runs xwiki
+# ─────────────────────────────────────────────────────────
+
+- name: Deploy xwiki
+  hosts: server
+  become: true
+  vars_files:
+    - ../vault/vault.yml
+  gather_facts: true
+  roles:
+    - xwiki

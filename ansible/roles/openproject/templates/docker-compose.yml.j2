@@ -1,0 +1,35 @@
+# ─────────────────────────────────────────────────────────
+# openproject/docker-compose.yml.j2 — OpenProject (all-in-one)
+# ─────────────────────────────────────────────────────────
+# All-in-one image bundles its own PostgreSQL + memcached.
+# Volumes persist the bundled DB (pgdata) and app assets.
+#
+# Reference: https://www.openproject.org/docs/installation-and-operations/installation/docker/
+# ─────────────────────────────────────────────────────────
+
+name: openproject
+
+services:
+  openproject:
+    image: "openproject/openproject:{{ openproject_version }}"
+    container_name: openproject
+    restart: unless-stopped
+    ports:
+      - "{{ openproject_host_port }}:80"
+    environment:
+      OPENPROJECT_HOST__NAME: {{ openproject_host_name }}
+      OPENPROJECT_HTTPS: "false"
+      SECRET_KEY_BASE: {{ vault_openproject_secret_key }}
+    volumes:
+      - openproject_pgdata:/var/openproject/pgdata
+      - openproject_assets:/var/openproject/assets
+    networks:
+      - {{ docker_network_name }}
+
+volumes:
+  openproject_pgdata:
+  openproject_assets:
+
+networks:
+  {{ docker_network_name }}:
+    external: true

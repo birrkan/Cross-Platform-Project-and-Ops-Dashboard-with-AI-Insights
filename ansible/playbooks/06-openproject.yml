@@ -1,0 +1,14 @@
+# ─────────────────────────────────────────────────────────
+# 06-openproject.yml — Deploy openproject
+# ─────────────────────────────────────────────────────────
+# Runs openproject
+# ─────────────────────────────────────────────────────────
+
+- name: Deploy openproject
+  hosts: server
+  become: true
+  vars_files:
+    - ../vault/vault.yml
+  gather_facts: true
+  roles:
+    - openproject
