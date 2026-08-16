@@ -43,21 +43,23 @@ IT Support
 Open incidents:  
 23  
 
-Main issue:  
+Main issues:  
 Authentication failures  
 
 AI Summary:  
-Most incidents originate from the latest application update.  
+e.g. Most incidents originate from the latest application update.  
 ────────────────────────  
 Development  
 Active tasks:  
 18  
 
+Tasks summary:
+
 Sprint progress:  
 72%  
 
 AI Summary:  
-Authentication bug is blocking release.  
+e.g. Authentication bug is blocking release.  
 ────────────────────────  
 Risks  
 

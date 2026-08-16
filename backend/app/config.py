@@ -42,4 +42,8 @@ class Settings(BaseSettings):
     openproject_url: str = "http://192.168.122.10:7003"
     openproject_api_token: str = ""
 
+    xwiki_url: str = "http://192.168.122.10:7002"
+    xwiki_username: str = ""
+    xwiki_password: str = ""
+
 settings = Settings()
