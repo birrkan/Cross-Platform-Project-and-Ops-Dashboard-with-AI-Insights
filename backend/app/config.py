@@ -29,7 +29,7 @@ class Settings(BaseSettings):
     server_port: int = 7222
 
     llamacpp_base_url: str = "http://127.0.0.1:3535/v1"
-    llamacpp_model: str = "MaziyarPanahi/Qwen3-14B-GGUF:Q4_K_M"
+    llamacpp_model: str = ""
 
     glpi_api_url: str = "http://192.168.122.10:7001"
     glpi_api_path: str = "/api.php/v2.3"
