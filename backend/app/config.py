@@ -39,4 +39,7 @@ class Settings(BaseSettings):
     glpi_username: str = ""
     glpi_password: str = ""
 
+    openproject_url: str = "http://192.168.122.10:7003"
+    openproject_api_token: str = ""
+
 settings = Settings()
