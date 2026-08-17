@@ -48,26 +48,25 @@ The platform is built around a **project manager's daily reality**: keeping a wh
 while operations handles incidents in GLPI and developers build features in OpenProject, the project manager can open a single page and see *what is happening right now*. They can see active incidents, tasks in progress, incidents waiting on dev work and get **AI-generated insights** (summaries, incident analysis, and weekly sprint reports) without reading through every ticket or task by hand.
 
 # Demo Showcase:
-### Real time usage demo recording: (takes few seconds to load the gif file)
+## Real time usage demo recording: (takes few seconds to load the gif file)
 The demo runs on a graphic card with 8GB VRAM  
 Model used: Qwen3-Coder with 30 Billion parameters (3B active)  
 The script to run llama.cpp alone is from my another project:  
 https://github.com/birrkan/llama.cpp-management-gui
 ![demo](screenshots/demo.webp)
-### Dashboard:
+## Dashboard:
 ![title](screenshots/title.png)
-### Summary on the Dashboard:
+## Generated summary on the Dashboard:
 ![summary](screenshots/summary.png)
-### Project Status Report on the Dashboard:
+## Generated Project Status Report on the Dashboard:
 ![summary](screenshots/report.png)
-### Incident analysis on the Dashboard:
+## Generated incident analysis on the Dashboard:
 ![inc-analysis](screenshots/inc-analysis.png)
-### Example demo Dev tasks on OpenProject:
+## Example demo Dev tasks prepared on OpenProject:
 ![op-tasks](screenshots/op-tasks.png)
-### Example demo incidents on GLPI:
+## Example demo incidents prepared on GLPI:
 ![incidents](screenshots/incidents.png)
-
-### FastAPI Status page:
+## FastAPI Status page:
 ![fastapi](screenshots/fastapi.png)
 
 
@@ -96,6 +95,8 @@ GLPI_PASSWORD=glpi
 ---  
 ---  
 ---  
+
+  
 # **How It Works? Technical Overview**
 
 ## Infrastructure (Ansible)
@@ -129,9 +130,9 @@ Every system is integrated through its **official REST API**:
 
 All credentials are loaded from a local `.env` file (gitignored), never hardcoded.
 
-### How to start Uvicorn and serve a FastAPI app?:
+### Starting Uvicorn and serving the FastAPI app:
 ```sh
-# while in project root:
+# from project root:
 .venv/bin/uvicorn backend.app.main:app --reload --port 3536
 ```
 
