@@ -29,8 +29,19 @@ import httpx
 from backend.app.config import settings
 
 
+# Asks llama.cpp which model it currently has loaded and returns its name.
+# llama.cpp exposes the active model via GET {base}/models; the name lives at
+# data["models"][0]["name"]. This avoids hardcoding the model path in .env.
+async def get_loaded_model() -> str:
+    async with httpx.AsyncClient(timeout=5.0) as client:
+        resp = await client.get(f"{settings.llamacpp_base_url}/models")
+    resp.raise_for_status()
+    return resp.json()["models"][0]["name"]
+
+
 # Sends a chat request to llama.cpp and returns the assistant's reply text
 # by POSTing OpenAI-style messages to {base}/chat/completions and reading choices[0].message.content.
+# The model name is detected automatically from llama.cpp (no manual config needed).
 async def chat_completion(
     messages: list[dict],
     *,
@@ -38,8 +49,9 @@ async def chat_completion(
     temperature: float = 0.3,
     timeout: float = 180.0,
 ) -> str:
+    model = await get_loaded_model()
     payload = {
-        "model": settings.llamacpp_model,
+        "model": model,
         "messages": messages,
         "max_tokens": max_tokens,
         "temperature": temperature,

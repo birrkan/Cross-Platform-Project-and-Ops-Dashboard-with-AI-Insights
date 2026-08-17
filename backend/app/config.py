@@ -8,13 +8,10 @@
 # ─────────────────────────────────────────────────────────
 
 from pathlib import Path
-
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
 
 # Going up 3 directories from backend/app/config.py reaches the project root
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
-
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
@@ -29,7 +26,6 @@ class Settings(BaseSettings):
     server_port: int = 7222
 
     llamacpp_base_url: str = "http://127.0.0.1:3535/v1"
-    llamacpp_model: str = ""
 
     glpi_api_url: str = "http://192.168.122.10:7001"
     glpi_api_path: str = "/api.php/v2.3"
