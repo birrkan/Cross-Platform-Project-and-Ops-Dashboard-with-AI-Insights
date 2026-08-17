@@ -12,18 +12,44 @@
 # Cross-Platform Project & Ops Dashboard with AI Insights:
 A self-hosted AI-powered management dashboard that connects IT service management, development workflows, and organizational knowledge into a unified operational view. The platform integrates GLPI (incidents and requests), OpenProject (development tasks and project progress), and XWiki (knowledge base) to provide AI-generated summaries, trend analysis, and weekly operational reports. A locally hosted LLM analyzes data from connected systems while keeping business information private. The platform is deployed on a single server using Ansible and developed with FastAPI.
 
+# Demo Showcase:
+### Real time usage demo recording: (takes few seconds to load the gif file)
+![demo](screenshots/demo.webp)
+### Dashboard:
+![title](screenshots/title.png)
+### Summary on the Dashboard:
+![summary](screenshots/summary.png)
+### Project Status Report on the Dashboard:
+![summary](screenshots/report.png)
+### Incident analysis on the Dashboard:
+![inc-analysis](screenshots/inc-analysis.png)
+### Example demo Dev tasks on OpenProject:
+![op-tasks](screenshots/op-tasks.png)
+### Example demo incidents on GLPI:
+![incidents](screenshots/incidents.png)
 
+### FastAPI Status page:
+![fastapi](screenshots/fastapi.png)
 
-## how to start FASTAPI:
+## how to start uvicorn:
 ```
 # while in project root:
 .venv/bin/uvicorn backend.app.main:app --reload --port 3536
 ```
 
+```
+AI Dashboard url: http://<ip address>:3536  
+FastAPI url: http://<ip address>:3536/docs  
+GLPI url: http://<ip address>:7001  
+OpenProject url: http://<ip address>:7003  
+XWiki url: http://<ip address>:7002  
+```
+
+<!--
 ## enabling api for glpi:
 https://help.glpi-project.org/tutorials/readme-1/api-v2
-![enable glpi api](screenshots/glpi/1glpi-enable-api.png)
-![get api token](screenshots/glpi/2glpi-get-token.png)
+![enable glpi api](screenshots/glpi-token/1glpi-enable-api.png)
+![get api token](screenshots/glpi-token/2glpi-get-token.png)
 
 ## glpi id and token
 include the id and token in .env file. (rename .env.example to .env)
@@ -32,37 +58,4 @@ GLPI_CLIENT_ID=
 GLPI_CLIENT_SECRET=
 GLPI_USERNAME=glpi
 GLPI_PASSWORD=glpi
-```
-
-
-
-### MVP goal example:
-Company Status  
-────────────────────────  
-IT Support  
-Open incidents:  
-23  
-
-Main issues:  
-Authentication failures  
-
-AI Summary:  
-e.g. Most incidents originate from the latest application update.  
-────────────────────────  
-Development  
-Active tasks:  
-18  
-
-Tasks summary:
-
-Sprint progress:  
-72%  
-
-AI Summary:  
-e.g. Authentication bug is blocking release.  
-────────────────────────  
-Risks  
-
-⚠ Database migration delayed  
-⚠ Increasing ticket volume  
-⚠ 2 critical bugs unresolved
+```-->

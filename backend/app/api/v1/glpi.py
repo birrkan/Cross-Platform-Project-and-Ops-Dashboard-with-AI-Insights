@@ -41,19 +41,31 @@ async def list_tickets():
         )
     if resp.status_code != 200:
         raise HTTPException(status_code=resp.status_code, detail=resp.text)
-    return resp.json()
+    # Deleted tickets (soft-deleted in GLPI) should never be shown.
+    return [t for t in resp.json() if not t.get("is_deleted")]
 
 
 ACTIVE_STATUS_IDS = {1, 2, 3, 4}
 
 
+# GLPI status IDs:
+#   1 New, 2 Processing (assigned), 3 Processing (planned),
+#   4 Pending, 5 Solved, 6 Closed
+CLOSED_STATUS_ID = 6
+
+
 @router.get("/tickets/stats")
-async def ticket_stats():
+async def ticket_stats(exclude_closed: bool = False):
+    """Compute summary numbers for the GLPI tickets.
+    If 'exclude_closed' is True, Closed tickets (status 6) are
+    left out of every count. Solved (5) is still counted.
+    """
     tickets = await list_tickets()
 
-    total = len(tickets)
+    total = 0
     active = 0
     solved = 0
+    closed = 0
     by_status = defaultdict(int)
     by_urgency = defaultdict(int)
     by_day = defaultdict(int)
@@ -64,13 +76,21 @@ async def ticket_stats():
             continue
 
         status_id = t.get("status", {}).get("id")
+
+        # For the summary view we skip closed tickets entirely.
+        if exclude_closed and status_id == CLOSED_STATUS_ID:
+            continue
+
+        total += 1
         by_status[t.get("status", {}).get("name", "Unknown")] += 1
         by_urgency[f"urgency_{t.get('urgency', 0)}"] += 1
 
         if status_id in ACTIVE_STATUS_IDS:
             active += 1
-        elif status_id in {5, 6}:
+        elif status_id == 5:
             solved += 1
+        elif status_id == CLOSED_STATUS_ID:
+            closed += 1
 
         created = t.get("date", "")[:10]
         if created:
@@ -88,6 +108,7 @@ async def ticket_stats():
         "total": total,
         "active": active,
         "solved": solved,
+        "closed": closed,
         "by_status": dict(by_status),
         "by_urgency": dict(by_urgency),
         "trend_14d": trend,
@@ -102,6 +123,25 @@ SUB_RESOURCES = {
     "validations": "Timeline/Validation",
     "costs": "Cost",
 }
+
+
+async def get_ticket_followups(ticket_id: int) -> list[dict]:
+    """Return the followups (comments) of one ticket.
+
+    Used by the AI endpoints to decide the "Status Update" text
+    on the OPS side (e.g. whether the incident is fixed, handed
+    to dev, still waiting).
+    """
+    token = await _get_token()
+    async with AsyncClient() as client:
+        resp = await client.get(
+            f"{settings.glpi_api_url}{settings.glpi_api_path}"
+            f"/Assistance/Ticket/{ticket_id}/Timeline/Followup",
+            headers={"Authorization": f"Bearer {token}", "Accept": "application/json"},
+        )
+    if resp.status_code != 200:
+        return []
+    return resp.json()
 
 
 @router.get("/tickets/{ticket_id}/full")

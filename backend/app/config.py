@@ -24,7 +24,7 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    app_name: str = "AI Operations Command Center"
+    app_name: str = "Cross-Platform Project Status Dashboard with AI Insights"
     debug: bool = False
     server_port: int = 7222
 

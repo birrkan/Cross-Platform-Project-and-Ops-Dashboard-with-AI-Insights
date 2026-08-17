@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cross-Platform Project &amp; Ops Dashboard with AI Insights</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f7f7f7;
+      color: #333;
+      margin: 0;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    .subtitle {
+      color: #666;
+      margin-bottom: 2rem;
+    }
+    .buttons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .description {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    .description p {
+      margin: 0 0 0.75rem 0;
+    }
+    .description ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+    .description li {
+      margin-bottom: 0.4rem;
+    }
+    .description strong {
+      font-weight: 600;
+    }
+    button {
+      font-size: 1rem;
+      padding: 0.6rem 1.2rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #fff;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    button:hover {
+      background: #eceff1;
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .output {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1.25rem;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      min-height: 120px;
+      display: none;
+    }
+    .output.show {
+      display: block;
+    }
+    .output h2 {
+      margin: 1.25rem 0 0.5rem 0;
+      padding: 0.35rem 0.6rem;
+      background: #fdf1ef;
+      border-left: 4px solid #d9534f;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+    .output h2:first-of-type {
+      margin-top: 0;
+    }
+    .output table {
+      border-collapse: collapse;
+      margin: 0.75rem 0;
+      width: 100%;
+    }
+    .output th, .output td {
+      border: 1px solid #ddd;
+      padding: 0.4rem 0.6rem;
+      text-align: left;
+    }
+    .output th {
+      background: #f2f2f2;
+      font-weight: 600;
+    }
+    .output pre {
+      background: #f5f5f5;
+      padding: 0.75rem;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+    .status {
+      font-size: 0.85rem;
+      color: #888;
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Cross-Platform Project Status Dashboard with AI Insights</h1>
+    <p class="subtitle">A local AI watches your GLPI tickets and OpenProject tasks and turns them into clear, readable project insights.</p>
+
+    <div class="description">
+      <p><strong>How it works:</strong> Each button asks the locally hosted AI model (llama.cpp) to look at your live data and write something for you. Clicking a button gathers the current ticket / task data, sends it to the model, and shows the result below. Each task can take up to a minute.</p>
+      <ul>
+        <li><strong>Summary:</strong> Split into <strong>OPS Side</strong> (IT tickets as a table + summary) and <strong>DEV Side</strong> (development tasks as a table + summary).</li>
+        <li><strong>Incident Analysis:</strong> Reads the actual tickets and focuses on analysis on what's recurring, common issues, and what to investigate first.</li>
+        <li><strong>Report:</strong> The full structured status report (Project Status / IT Support / Development / Risks).</li>
+      </ul>
+    </div>
+
+    <div class="buttons">
+      <button id="btn-summary" onclick="run('/api/v1/ai/summary')">Summary</button>
+      <button id="btn-incident" onclick="run('/api/v1/ai/incident-analysis')">Incident Analysis</button>
+      <button id="btn-report" onclick="run('/api/v1/ai/report')">Report</button>
+    </div>
+
+    <div id="output" class="output"></div>
+    <div id="status" class="status"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    async function run(url) {
+      const output = document.getElementById("output");
+      const status = document.getElementById("status");
+      const buttons = document.querySelectorAll("button");
+      buttons.forEach((b) => (b.disabled = true));
+
+      output.classList.remove("show");
+      status.textContent = "AI is thinking... (this can take up to a minute)";
+
+      try {
+        const resp = await fetch(url, { method: "POST" });
+        if (!resp.ok) {
+          throw new Error("HTTP " + resp.status + ": " + (await resp.text()));
+        }
+        const data = await resp.json();
+        output.innerHTML = marked.parse(data.ai_text || "(no text returned)");
+        output.classList.add("show");
+        status.textContent = "Done. AI took " + data.elapsed_ms / 1000 + "s.";
+      } catch (err) {
+        output.textContent = "Error: " + err.message;
+        output.classList.add("show");
+        status.textContent = "";
+      } finally {
+        buttons.forEach((b) => (b.disabled = false));
+      }
+    }
+  </script>
+</body>
+</html>
